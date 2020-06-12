@@ -1,6 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ImageBackground, StatusBar, Switch, View } from 'react-native';
+import {
+  ImageBackground,
+  StatusBar,
+  Switch,
+  View,
+  Keyboard,
+} from 'react-native';
 import { Router, Route } from './routing';
 import MainScreen from './MainScreen';
 import PokemonScreen from './PokemonScreen';
@@ -9,7 +15,7 @@ import { setIsDarkMode } from '../store/actions/settingsActions';
 import {
   subscribeToSocket,
   unsubscribeToSocket,
-} from '../store/actions/pokemonActions';
+} from '../store/actions/pokemonsActions';
 import Images from '../assets';
 
 export default function () {
@@ -37,7 +43,10 @@ export default function () {
         <Switch
           trackColor={{ false: 'pink', true: '#f5dd4b' }}
           thumbColor={isDarkMode ? 'yellow' : 'red'}
-          onValueChange={() => dispatch(setIsDarkMode(!isDarkMode))}
+          onValueChange={() => {
+            Keyboard.dismiss();
+            dispatch(setIsDarkMode(!isDarkMode));
+          }}
           value={isDarkMode}
           style={styles.switch}
         />

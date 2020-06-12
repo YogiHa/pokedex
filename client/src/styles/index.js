@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   pokemonlistView: {
     flex: 1,
     alignItems: 'center',
+    height: 180,
   },
   subtitle: {
     marginTop: 12,
@@ -79,7 +80,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     textAlign: 'center',
     flex: 1,
-    width: '100%',
+    alignSelf: 'center',
+    width: 170,
     height: 50,
   },
   horizontalFlatListItem: {
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
   },
-  switch: { position: 'absolute', left: 30, top: 30 },
+  switch: { position: 'absolute', left: 30, top: 30, zIndex: 2 },
   backgroundImage: {
     position: 'absolute',
     left: 0,
@@ -134,6 +136,15 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily,
     textAlign: 'center',
+    alignSelf: 'center',
+  },
+  flatListContainer: { paddingBottom: 50 },
+  iconstypSeperator: { height: 3 },
+  mainTouchableOpacity: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
   },
 });
 

@@ -17,7 +17,7 @@ const corsOptions = {
   },
 };
 
-const pokemonList = require('./data/pokemonList.json');
+let pokemonList = require('./data/pokemonList.json');
 const handleFetchList = (req, res) => {
   const { currLength } = req.body;
   try {
@@ -43,23 +43,35 @@ app.use(bodyParser.json());
 app.use(compression());
 
 io.on('connection', (socket) => {
-  fs.readdir('./data/pokemons', (err, files) =>
-    err
-      ? console.log(err)
-      : files.map((fileName) =>
-          fs.watchFile(`./data/pokemons/${fileName}`, () => {
-            io.sockets.emit(
-              'pokemonInfo',
-              JSON.parse(fs.readFileSync(`./data/pokemons/${fileName}`))
-            );
-          })
-        )
+  fs.watchFile('./data/pokemonList.json', () => {
+    let changed = [];
+    let newList = JSON.parse(fs.readFileSync('./data/pokemonList.json'));
+    for (let i = 0; i < newList.length; i++) {
+      if (JSON.stringify(pokemonList[i]) != JSON.stringify(newList[i]))
+        changed.push({ i, data: newList[i] });
+    }
+    io.sockets.emit('updateLIst', changed);
+    pokemonList = newList;
+  });
+
+  fs.readdir(
+    './data/pokemons',
+    (err, files) =>
+      !err &&
+      files.map((fileName) =>
+        fs.watchFile(`./data/pokemons/${fileName}`, () => {
+          io.sockets.emit(
+            'pokemonInfo',
+            JSON.parse(fs.readFileSync(`./data/pokemons/${fileName}`))
+          );
+        })
+      )
   );
 });
 
 app.post('/fetchlist', (req, res) => handleFetchList(req, res));
 app.post('/fetchPokemon', (req, res) => handleFetchPokemon(req, res));
 
-server.listen(process.env.PORT || 3001, () => {
-  console.log(`app is running on port ${process.env.PORT || 3001}`);
+server.listen(3001, () => {
+  console.log(`app is running on port ${3001}`);
 });

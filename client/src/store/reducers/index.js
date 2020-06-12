@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import pokemonList from './pokemonListReducer';
+import pokemons from './pokemonsReducer';
 import settings from './settingsReducer';
 
-export default combineReducers({ pokemonList, settings });
+export default combineReducers({ pokemons, settings });

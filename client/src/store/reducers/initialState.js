@@ -1,4 +1,4 @@
 export default {
-  pokemonList: [],
+  pokemons: { list: [], isError: false },
   settings: { isDarkMode: false },
 };

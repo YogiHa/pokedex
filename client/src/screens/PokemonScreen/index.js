@@ -2,25 +2,31 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from '../routing';
 import { Text, View, FlatList, Image } from 'react-native';
-import { fetchPokemonInfo } from '../../store/actions/pokemonActions';
+import { fetchPokemonInfo } from '../../store/actions/pokemonsActions';
 import MyActivityIndicator from '../../components/MyActivityIndicator';
 import { styleContext } from '../../styles';
 import Images from '../../assets';
 
 export default function () {
   const { i } = useParams() || {};
-  const pokemon = useSelector((state) => state.pokemonList[i]) || {};
-  const [isLoading, setIsLoading] = useState(false);
+  const { list, isError } = useSelector((state) => state.pokemons);
+  const pokemon = list[i] || {};
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!pokemon.info && !isLoading) {
-      dispatch(fetchPokemonInfo(pokemon.name));
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [pokemon.info]);
+    !pokemon.info && dispatch(fetchPokemonInfo(pokemon.name));
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    isError
+      ? (interval = setInterval(() => {
+          dispatch(fetchPokemonInfo(pokemon.name));
+        }, 5000))
+      : clearInterval(interval);
+
+    return () => clearInterval(interval);
+  }, [isError]);
 
   const styles = useContext(styleContext);
 
@@ -34,8 +40,13 @@ export default function () {
         />
       </View>
       <View style={styles.blankSpace} />
-      {isLoading || !pokemon.info ? (
-        <MyActivityIndicator />
+
+      {!pokemon.info ? (
+        isError ? (
+          <Text style={styles.emptyDataText}> Network Error</Text>
+        ) : (
+          <MyActivityIndicator />
+        )
       ) : (
         <View style={styles.container}>
           <View style={styles.flexOne}>
@@ -45,11 +56,9 @@ export default function () {
               horizontal
               contentContainerStyle={styles.contentContainerHorizontal}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => {
-                return (
-                  <Image source={Images.icons[item]} style={styles.typeIcon} />
-                );
-              }}
+              renderItem={({ item }) => (
+                <Image source={Images.icons[item]} style={styles.typeIcon} />
+              )}
             />
           </View>
           <View style={styles.flexOne}>

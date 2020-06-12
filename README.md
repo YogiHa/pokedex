@@ -27,13 +27,13 @@ BackEnd built with node.js and express, FrontEnd with React-Native (powerd by ex
     $ npm i
   ```
 
-  - For running through a mobile emulator, add your own IP adress to `~/client/src/store/actions/pokemonActions.js`
+  - For running through a mobile emulator, add your own IP adress to `~/client/src/store/actions/pokemonsActions.js`
 
     ```sh
     let baseURL =
       Platform.OS == 'web'
         ? 'http://localhost:3001/'
-        : `http://${'Your IP adress goes here'}:3001/`; // line 7
+        : `http://${'Your IP adress goes here'}:3001/`; // line 12
     ```
 
     and type,
@@ -48,7 +48,7 @@ BackEnd built with node.js and express, FrontEnd with React-Native (powerd by ex
     app.use(cors(corsOptions)); // line 41
     ```
 
-    at `~/pokedex/index.js`. In case your front end isn't running on port 3000, add your port to `whiteList` domains at this file
+    at `~/pokedex/index.js` and run server again. In case your front end isn't running on port 3000, add your port to `whiteList` domains at this file
 
     and type
 
