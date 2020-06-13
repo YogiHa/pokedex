@@ -72,6 +72,4 @@ io.on('connection', (socket) => {
 app.post('/fetchlist', (req, res) => handleFetchList(req, res));
 app.post('/fetchPokemon', (req, res) => handleFetchPokemon(req, res));
 
-server.listen(3001, () => {
-  console.log(`app is running on port ${3001}`);
-});
+server.listen(3001, () => console.log(`app is running on port 3001`));

@@ -27,20 +27,21 @@ BackEnd built with node.js and express, FrontEnd with React-Native (powerd by ex
     $ npm i
   ```
 
-  - For running through a mobile emulator, add your own IP adress to `~/client/src/store/actions/pokemonsActions.js`
-
-    ```sh
-    let baseURL =
-      Platform.OS == 'web'
-        ? 'http://localhost:3001/'
-        : `http://${'Your IP adress goes here'}:3001/`; // line 12
-    ```
-
-    and type,
+  - For running through a mobile emulator type,
 
     ```sh
     $ npm start
     ```
+
+    Expo developer tools client should open in a browser window.
+
+    Alternativly, you can directly run
+
+    ```sh
+     $ npm run android
+    ```
+
+    (App havn't been tested on iOS OS)
 
   - For running on web, uncomment
 

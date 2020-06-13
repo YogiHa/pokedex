@@ -3,10 +3,11 @@ import {
   FETCH_POKEMON_INFO,
   FETCH_ERROR,
   UPDATE_LIST,
+  CLEAR_ERROR,
 } from '../../constants';
 import initalState from '../initialState';
 
-export default (state = initalState.pokemons, action) => {
+export default (state = initalState.pokemonsAPI, action) => {
   let newList = [...state.list];
   switch (action.type) {
     case FETCH_LIST:
@@ -23,10 +24,11 @@ export default (state = initalState.pokemons, action) => {
     case FETCH_ERROR:
       return { ...state, isError: true };
 
+    case CLEAR_ERROR:
+      return { ...state, isError: false };
+
     case UPDATE_LIST:
-      action.changed.map((change) => {
-        if (!!newList[change.i]) newList[change.i] = change.data;
-      });
+      action.changed.map((change) => (newList[change.i] = change.data));
       return { ...state, list: newList };
     default:
       return state;

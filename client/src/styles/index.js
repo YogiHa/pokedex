@@ -1,10 +1,22 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
 const styleContext = createContext();
 function StyleContextProvider({ children }) {
   const isDarkMode = useSelector((state) => state.settings.isDarkMode);
+  const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
+
+  function onDimensionsChange() {
+    let { height, width } = Dimensions.get('window');
+    setDimensions({ height, width });
+  }
+
+  useEffect(() => {
+    onDimensionsChange();
+    Dimensions.addEventListener('change', onDimensionsChange);
+    return () => Dimensions.removeEventListener('change', onDimensionsChange);
+  }, []);
 
   let withTextColor = (obj) => [obj, { color: isDarkMode ? 'red' : 'black' }];
   let withBackgroundColor = (obj) => [
@@ -14,6 +26,10 @@ function StyleContextProvider({ children }) {
   let withBackgroundColor2 = (obj) => [
     obj,
     { backgroundColor: isDarkMode ? 'darkblue' : 'red' },
+  ];
+  let withBackgroundColor3 = (obj) => [
+    obj,
+    { backgroundColor: isDarkMode ? 'black' : 'white' },
   ];
 
   return (
@@ -26,6 +42,17 @@ function StyleContextProvider({ children }) {
         horizontalFlatListItem: withTextColor(styles.horizontalFlatListItem),
         pokemonlistView: withBackgroundColor2(styles.pokemonlistView),
         emptyDataText: withTextColor(styles.emptyDataText),
+        safeAreaView: withBackgroundColor3(styles.safeAreaView),
+        backgroundImage: [styles.backgroundImage, { ...dimensions }],
+        typeFiltersView: [
+          styles.typeFiltersView,
+          { right: dimensions.width / 1.3 },
+        ],
+
+        contentContainerHorizontal: [
+          styles.contentContainerHorizontal,
+          { width: Platform.OS == 'web' ? dimensions.width / 1.3 : null },
+        ],
       }}
     >
       {children}
@@ -105,8 +132,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
   },
   typeIcon: {
     borderRadius: 25,
@@ -122,11 +147,12 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   typeFiltersView: {
+    flex: 1,
     position: 'absolute',
-    left: 20,
+    height: '100%',
+    top: 70,
   },
   contentContainerHorizontal: {
-    width: Platform.OS == 'web' ? Dimensions.get('window').width / 1.3 : null,
     justifyContent: 'center',
   },
   emptyDataText: {
@@ -140,6 +166,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer: { paddingBottom: 50 },
   iconstypSeperator: { height: 3 },
+  safeAreaView: { flex: 1 },
   mainTouchableOpacity: {
     flex: 1,
     width: '100%',

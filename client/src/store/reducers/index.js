@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import pokemons from './pokemonsReducer';
+import pokemonsAPI from './pokemonsAPIReducer';
 import settings from './settingsReducer';
 
-export default combineReducers({ pokemons, settings });
+export default combineReducers({ pokemonsAPI, settings });

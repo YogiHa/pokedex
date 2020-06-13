@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from '../routing';
 import { Text, View, FlatList, Image } from 'react-native';
-import { fetchPokemonInfo } from '../../store/actions/pokemonsActions';
+import { fetchPokemonInfo } from '../../store/actions/pokemonsAPIActions';
 import MyActivityIndicator from '../../components/MyActivityIndicator';
 import { styleContext } from '../../styles';
 import Images from '../../assets';
 
 export default function () {
   const { i } = useParams() || {};
-  const { list, isError } = useSelector((state) => state.pokemons);
+  const { list, isError } = useSelector((state) => state.pokemonsAPI);
   const pokemon = list[i] || {};
   const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ export default function () {
 
       {!pokemon.info ? (
         isError ? (
-          <Text style={styles.emptyDataText}> Network Error</Text>
+          <Text style={styles.emptyDataText}> An Error Occurred </Text>
         ) : (
           <MyActivityIndicator />
         )

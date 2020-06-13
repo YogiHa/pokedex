@@ -3,7 +3,7 @@ import { FlatList, TouchableWithoutFeedback, View, Image } from 'react-native';
 import Images from '../../../assets';
 import { styleContext } from '../../../styles';
 
-export default function ({ typeFilter, handleTypeFilter }) {
+export default function ({ typeFilter, handleTypeFilterPress }) {
   const styles = useContext(styleContext);
   const icons = Object.entries(Images.icons);
 
@@ -21,7 +21,7 @@ export default function ({ typeFilter, handleTypeFilter }) {
       renderItem={({ item }) => {
         const [key, value] = item;
         return (
-          <TouchableWithoutFeedback onPress={() => handleTypeFilter(key)}>
+          <TouchableWithoutFeedback onPress={() => handleTypeFilterPress(key)}>
             <View style={{ opacity: typeFilter.includes(key) ? 1 : 0.2 }}>
               <Image style={styles.typeFilters} source={value} />
             </View>

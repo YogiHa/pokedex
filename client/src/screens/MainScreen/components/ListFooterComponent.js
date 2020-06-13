@@ -7,12 +7,13 @@ import { styleContext } from '../../../styles';
 export default function ({ isLoading, filteredList }) {
   const styles = useContext(styleContext);
 
-  const isError = useSelector((state) => state.pokemons.isError);
-  return isLoading ? (
-    <MyActivityIndicator />
-  ) : (
-    isError && filteredList.length && (
-      <Text style={styles.subtitle}> network error </Text>
-    )
+  const isError = useSelector((state) => state.pokemonsAPI.isError);
+  return (
+    !!filteredList.length &&
+    (isLoading ? (
+      <MyActivityIndicator />
+    ) : (
+      isError && <Text style={styles.subtitle}> an error occurred </Text>
+    ))
   );
 }
