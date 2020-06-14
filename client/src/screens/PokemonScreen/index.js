@@ -6,6 +6,7 @@ import { fetchPokemonInfo } from '../../store/actions/pokemonsAPIActions';
 import MyActivityIndicator from '../../components/MyActivityIndicator';
 import { styleContext } from '../../styles';
 import Images from '../../assets';
+import useErrorTimeOut from '../../utils/useErrorTimeOut';
 
 export default function () {
   const { i } = useParams() || {};
@@ -17,16 +18,7 @@ export default function () {
     !pokemon.info && dispatch(fetchPokemonInfo(pokemon.name));
   }, []);
 
-  useEffect(() => {
-    let interval;
-    isError
-      ? (interval = setInterval(() => {
-          dispatch(fetchPokemonInfo(pokemon.name));
-        }, 5000))
-      : clearInterval(interval);
-
-    return () => clearInterval(interval);
-  }, [isError]);
+  useErrorTimeOut(() => dispatch(fetchPokemonInfo(pokemon.name)));
 
   const styles = useContext(styleContext);
 

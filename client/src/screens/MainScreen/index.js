@@ -16,6 +16,7 @@ import { styleContext } from '../../styles';
 import IconsBar from './components/IconsBar';
 import ListEmptyComponent from './components/ListEmptyComponent';
 import ListFooterComponent from './components/ListFooterComponent';
+import useErrorTimeOut from '../../utils/useErrorTimeOut';
 
 export default function () {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,32 +28,25 @@ export default function () {
   const { entries } = useHistory();
 
   useEffect(() => {
-    list.length && setIsLoading(false);
-  }, [list]);
-
-  useEffect(() => {
-    isLoading && dispatch(fetchList());
-  }, [isLoading]);
-
-  useEffect(() => {
-    let interval;
-    if (isError) {
-      setIsLoading(false);
-      interval = setInterval(() => {
-        setIsLoading(true);
-      }, 5000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isError]);
-
-  useEffect(() => {
     if (entries && entries.length > 1) {
       let { pathname } = entries[entries.length - 1];
       scrollToIndex(pathname.slice(pathname.indexOf('/', 2) + 1));
     }
   }, []);
+
+  useEffect(() => {
+    list.length && setIsLoading(false);
+  }, [list]);
+
+  useEffect(() => {
+    isError && setIsLoading(false);
+  }, [isError]);
+
+  useEffect(() => {
+    isLoading && dispatch(fetchList());
+  }, [isLoading]);
+
+  useErrorTimeOut(() => setIsLoading(true));
 
   const loadMore = () => list.length < 151 && !isError && setIsLoading(true);
 
